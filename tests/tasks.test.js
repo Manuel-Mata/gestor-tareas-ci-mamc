@@ -50,6 +50,13 @@ describe('Tareas', () => {
         const res = await request(app).delete('/tasks/99');
         expect(res.status).toBe(404);
     });
+    test('GET /reporte responde en menos de 50 ms (regresión de rendimiento)', async () => {
+        const inicio = process.hrtime.bigint();
+        const res = await request(app).get('/reporte');
+        const ms = Number(process.hrtime.bigint() - inicio) / 1e6;
+        expect(res.status).toBe(200);
+        expect(ms).toBeLessThan(50);
+    });
 });
 describe('Reporte', () => {
     test('GET /reporte cuenta tareas totales, hechas y pendientes', async () => {
